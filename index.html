@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti-Spy Screen Display Filter - Android & Windows</title>
+    <meta name="description" content="Aplikasi software privacy filter layar untuk Android dan Windows Laptop. Menjaga privasi Anda dari samping tanpa mengganggu sidik jari bawah layar.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0a0f;
+            --card-bg: rgba(30, 29, 45, 0.6);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #7b61ff;
+            --primary-glow: rgba(123, 97, 255, 0.35);
+            --secondary: #ffd54f;
+            --text-main: #f4f4f6;
+            --text-muted: #a7a9be;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(123, 97, 255, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 213, 79, 0.08) 0%, transparent 45%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header / Navbar */
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: rgba(11, 10, 15, 0.7);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .github-link:hover {
+            color: var(--text-main);
+            border-color: var(--primary);
+            background-color: rgba(123, 97, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px 0;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background-color: rgba(123, 97, 255, 0.15);
+            border: 1px solid rgba(123, 97, 255, 0.3);
+            border-radius: 30px;
+            color: #b5a6ff;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 40%, #ffd54f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: clamp(16px, 2.5vw, 19px);
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto 40px auto;
+        }
+
+        /* Download Section */
+        .download-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 30px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(123, 97, 255, 0.4);
+            box-shadow: 0 12px 30px rgba(123, 97, 255, 0.15);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            background-color: rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .android-icon {
+            fill: #a4c639;
+        }
+
+        .windows-icon {
+            fill: #0078d4;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+            flex-grow: 1;
+            max-width: 280px;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-android {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-android:hover {
+            background-color: #664dff;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .btn-windows {
+            background-color: var(--text-main);
+            color: #0b0a0f;
+        }
+
+        .btn-windows:hover {
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .file-meta {
+            display: block;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Feature section */
+        .section-title {
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 48px;
+        }
+
+        .section-title span {
+            color: var(--secondary);
+        }
+
+        .problem-vs-solution {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(239, 83, 80, 0.05) 0%, rgba(30, 29, 45, 0.3) 100%);
+            border: 1px solid rgba(239, 83, 80, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(30, 29, 45, 0.3) 100%);
+            border: 1px solid rgba(76, 175, 80, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .grid-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .problem-title {
+            color: #ef5350;
+        }
+
+        .solution-title {
+            color: #66bb6a;
+        }
+
+        .grid-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Tabs / Guide Section */
+        .guide-section {
+            background: rgba(30, 29, 45, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 80px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 36px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            padding: 8px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -17px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .step-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .step-num {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.05);
+            line-height: 1;
+        }
+
+        .step-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--secondary);
+        }
+
+        .step-text {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 50px 0 40px 0;
+            }
+            .guide-section {
+                padding: 24px;
+            }
+            .tab-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .tab-btn.active::after {
+                display: none;
+            }
+            .tab-btn {
+                width: 100%;
+                border-radius: 8px;
+                padding: 10px;
+            }
+            .tab-btn.active {
+                background-color: rgba(123, 97, 255, 0.15);
+                color: var(--primary);
+                border: 1px solid rgba(123, 97, 255, 0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#ffd54f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 17V12" stroke="#ffd54f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="8" r="1" fill="#ffd54f"/>
+                </svg>
+                Anti-Spy <span>Screen</span>
+            </a>
+            <a href="https://github.com/khairulfarhan50-art/Anti-Spy" target="_blank" class="github-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.82-.26.82-.577v-2.234c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.82 1.102.82 2.222v3.293c0 .319.22.694.825.576C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                GitHub Code
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <span class="badge">Privasi Tanpa Hambatan Fisik</span>
+            <h1>Anti-Spy Display Filter</h1>
+            <p class="hero-desc">
+                Solusi cerdas berbasis perangkat lunak untuk melindungi layar HP dan laptop Anda dari intipan orang di sebelah Anda. Tanpa merusak sensitivitas sensor sidik jari bawaan layar.
+            </p>
+        </div>
+    </section>
+
+    <!-- Download Cards -->
+    <section class="container">
+        <div class="download-cards">
+            <!-- Android Card -->
+            <div class="card">
+                <div class="card-icon">
+                    <svg class="android-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.523 15.3c-.553 0-1.002-.449-1.002-1.002 0-.554.449-1.002 1.002-1.002.554 0 1.002.448 1.002 1.002 0 .553-.448 1.002-1.002 1.002zm-11.046 0c-.553 0-1.002-.449-1.002-1.002 0-.554.449-1.002 1.002-1.002.554 0 1.002.448 1.002 1.002 0 .553-.448 1.002-1.002 1.002zM12 18.204c-3.13 0-5.753-2.073-6.592-4.908h13.184c-.839 2.835-3.462 4.908-6.592 4.908zm6.657-6.202H5.343c-.22 0-.343-.223-.343-.446 0-3.328 2.308-6.14 5.378-6.72l-1.085-1.88a.386.386 0 0 1 .135-.528.384.384 0 0 1 .527.135l1.118 1.936c.338-.052.68-.079 1.027-.079.348 0 .69.027 1.027.079l1.118-1.936a.384.384 0 0 1 .527-.135c.176.101.237.324.136.528l-1.086 1.88c3.07.58 5.378 3.392 5.378 6.72 0 .223-.122.446-.343.446z"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Versi Android HP</h3>
+                <p class="card-desc">Dilengkapi kontrol slider opasitas, pilihan 4 pola filter visual, dan sakelar cepat Quick Settings Tile.</p>
+                <a href="https://github.com/khairulfarhan50-art/Anti-Spy/releases/download/v1.0.0/app-debug.apk" class="btn-download btn-android">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download APK Android
+                </a>
+                <span class="file-meta">Ukuran: ~7.9 MB | Android 8.0+</span>
+            </div>
+
+            <!-- Windows Card -->
+            <div class="card">
+                <div class="card-icon">
+                    <svg class="windows-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 3.449L9.75 2.1v9.45H0V3.449zM0 12.45h9.75v9.45L0 20.551v-8.1zM10.8 1.95L24 0v11.55H10.8V1.95zm0 10.5H24V24l-13.2-1.95v-9.6z"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Versi Windows Laptop</h3>
+                <p class="card-desc">Aplikasi desktop super ringan yang berjalan di System Tray dengan klik-tembus (click-through) tanpa lag.</p>
+                <a href="https://github.com/khairulfarhan50-art/Anti-Spy/releases/download/v1.0.0/AntiSpyDesktop.exe" class="btn-download btn-windows">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download EXE Windows
+                </a>
+                <span class="file-meta">Ukuran: 10 KB | Windows 10 / 11</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Software Anti-Spy? -->
+    <section class="container" style="margin-bottom: 80px;">
+        <h2 class="section-title">Kenapa Harus <span>Software Anti-Spy</span>?</h2>
+        
+        <div class="problem-vs-solution">
+            <div class="problem-card">
+                <h4 class="grid-title problem-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    Masalah Tempered Glass Anti-Spy Fisik
+                </h4>
+                <p class="grid-desc">
+                    Tempered glass fisik bekerja dengan memblokir cahaya pada sudut diagonal tertentu memakai bahan polarisasi gelap. Sayangnya, polarisasi fisik ini juga memblokir gelombang ultrasonik atau berkas cahaya yang dipancarkan oleh **sensor sidik jari di bawah layar (under-display fingerprint)**. Hal ini menyebabkan sensor sering kali gagal memindai sidik jari Anda dan Anda harus melepas tempered glass tersebut agar sensor bekerja kembali.
+                </p>
+            </div>
+
+            <div class="solution-card">
+                <h4 class="grid-title solution-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    Solusi Software Display Filter Kami
+                </h4>
+                <p class="grid-desc">
+                    Aplikasi ini menggunakan teknologi *overlay software*. Alih-alih memblokir secara fisik, aplikasi ini menggambar pola visual yang sangat rapat di layar (seperti garis-garis tipis atau kisi-kisi diagonal) secara transparan. Karena layar tetap rata dan tidak ada bahan fisik tambahan di atas kaca layar, **sensor sidik jari di bawah layar Anda tetap berfungsi 100% normal tanpa gangguan**. Privasi Anda tetap terjaga, dan sidik jari Anda tetap aman!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Guide -->
+    <section class="container">
+        <div class="guide-section">
+            <h2 class="section-title" style="margin-bottom: 24px;">Panduan Pemasangan</h2>
+            
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="openTab('android-guide')">📱 Panduan HP Android</button>
+                <button class="tab-btn" onclick="openTab('windows-guide')">💻 Panduan Laptop Windows</button>
+            </div>
+
+            <!-- Android Guide Content -->
+            <div id="android-guide" class="tab-content active">
+                <div class="steps">
+                    <div class="step-item">
+                        <span class="step-num">01</span>
+                        <h4 class="step-title">Instal Berkas APK</h4>
+                        <p class="step-text">Unduh berkas `app-debug.apk` dan buka di HP Anda. Pilih "Izinkan" jika muncul peringatan instalasi dari sumber tidak dikenal.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">02</span>
+                        <h4 class="step-title">Izinkan Akses Overlay</h4>
+                        <p class="step-text">Saat aplikasi pertama dibuka, tekan tombol "Berikan Izin" untuk mengaktifkan izin menggambar di atas aplikasi lain (*Draw over other apps*).</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">03</span>
+                        <h4 class="step-title">Atur Filter</h4>
+                        <p class="step-text">Aktifkan tombol sakelar utama. Sesuaikan tingkat kegelapan dengan slider (rekomendasi: 20%) dan pilih pola yang nyaman di mata Anda.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">04</span>
+                        <h4 class="step-title">Quick Settings Tile</h4>
+                        <p class="step-text">Tarik status bar atas dua kali, tekan ikon edit, lalu seret ubin "Anti-Spy Overlay" ke daftar ubin aktif untuk menyalakan/mematikan filter secara cepat.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Windows Guide Content -->
+            <div id="windows-guide" class="tab-content">
+                <div class="steps">
+                    <div class="step-item">
+                        <span class="step-num">01</span>
+                        <h4 class="step-title">Jalankan EXE</h4>
+                        <p class="step-text">Unduh berkas `AntiSpyDesktop.exe` (hanya 10 KB) dan klik ganda berkas tersebut untuk membukanya secara langsung.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">02</span>
+                        <h4 class="step-title">Cari di System Tray</h4>
+                        <p class="step-text">Aplikasi berjalan di latar belakang. Cari ikon **Shield (Perisai)** di pojok kanan bawah Windows dekat indikator penunjuk jam.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">03</span>
+                        <h4 class="step-title">Atur Lewat Klik Kanan</h4>
+                        <p class="step-text">Klik kanan pada ikon perisai tersebut untuk mematikan/menyalakan filter, mengubah tingkat kegelapan (10% - 90%), atau mengganti jenis pola filter.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">04</span>
+                        <h4 class="step-title">Menutup Aplikasi</h4>
+                        <p class="step-text">Untuk mematikan filter privasi sepenuhnya, klik kanan pada ikon perisai di System Tray lalu pilih menu "Keluar" (Exit).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Proyek Anti-Spy Screen Filter. Dikembangkan oleh <a href="https://github.com/khairulfarhan50-art" target="_blank">khairulfarhan50-art</a>.</p>
+            <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">Di-host secara gratis menggunakan GitHub Pages.</p>
+        </div>
+    </footer>
+
+    <!-- Tab Script -->
+    <script>
+        function openTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show the current tab and add active class to button
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
