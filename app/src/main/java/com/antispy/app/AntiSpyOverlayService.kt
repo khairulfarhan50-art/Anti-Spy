@@ -44,7 +44,7 @@ class AntiSpyOverlayService : Service() {
 
     private lateinit var windowManager: WindowManager
     private lateinit var overlayView: OverlayView
-    private var opacity: Float = 0.5f
+    private var opacity: Float = 0.2f
     private var pattern: String = PATTERN_LINES
 
     private val updateReceiver = object : BroadcastReceiver() {
@@ -69,7 +69,7 @@ class AntiSpyOverlayService : Service() {
         
         // Load initial preferences
         val sharedPref = getSharedPreferences("AntiSpyPrefs", Context.MODE_PRIVATE)
-        opacity = sharedPref.getFloat("opacity", 0.5f)
+        opacity = sharedPref.getFloat("opacity", 0.2f)
         pattern = sharedPref.getString("pattern", PATTERN_LINES) ?: PATTERN_LINES
 
         overlayView = OverlayView(this)
@@ -272,8 +272,8 @@ class AntiSpyOverlayService : Service() {
                 
                 PATTERN_LINES -> {
                     val density = resources.displayMetrics.density
-                    val pitch = 6 * density
-                    val lineWidth = 2.5f * density
+                    val pitch = 8 * density
+                    val lineWidth = 1.2f * density
                     
                     paint.style = Paint.Style.FILL
                     paint.color = Color.BLACK
@@ -288,10 +288,10 @@ class AntiSpyOverlayService : Service() {
                 
                 PATTERN_CROSSHATCH -> {
                     val density = resources.displayMetrics.density
-                    val pitch = 12 * density
+                    val pitch = 16 * density
                     
                     paint.style = Paint.Style.STROKE
-                    paint.strokeWidth = 2f * density
+                    paint.strokeWidth = 1f * density
                     paint.color = Color.BLACK
                     paint.alpha = alphaInt
                     

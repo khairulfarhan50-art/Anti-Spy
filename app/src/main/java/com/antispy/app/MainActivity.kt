@@ -120,7 +120,7 @@ class MainActivity : ComponentActivity() {
         val intent = Intent(this, AntiSpyOverlayService::class.java)
         if (start) {
             val sharedPref = getSharedPreferences("AntiSpyPrefs", Context.MODE_PRIVATE)
-            val opacity = sharedPref.getFloat("opacity", 0.5f)
+            val opacity = sharedPref.getFloat("opacity", 0.2f)
             val pattern = sharedPref.getString("pattern", AntiSpyOverlayService.PATTERN_LINES) ?: AntiSpyOverlayService.PATTERN_LINES
             
             intent.putExtra(AntiSpyOverlayService.EXTRA_OPACITY, opacity)
@@ -160,7 +160,7 @@ fun AntiSpyMainScreen(
 
     // SharedPreferences states
     val sharedPref = remember { context.getSharedPreferences("AntiSpyPrefs", Context.MODE_PRIVATE) }
-    var opacity by remember { mutableStateOf(sharedPref.getFloat("opacity", 0.5f)) }
+    var opacity by remember { mutableStateOf(sharedPref.getFloat("opacity", 0.2f)) }
     var pattern by remember {
         mutableStateOf(
             sharedPref.getString("pattern", AntiSpyOverlayService.PATTERN_LINES)
@@ -409,10 +409,10 @@ fun AntiSpyMainScreen(
                     value = opacity,
                     onValueChange = { valRounded ->
                         // Keep opacity in range 0.1 to 0.9 to avoid complete black screen
-                        val boundedVal = valRounded.coerceIn(0.1f, 0.9f)
+                        val boundedVal = valRounded.coerceIn(0.02f, 0.9f)
                         updateSettings(boundedVal, pattern)
                     },
-                    valueRange = 0.1f..0.9f,
+                    valueRange = 0.02f..0.9f,
                     colors = SliderDefaults.colors(
                         thumbColor = Color(0xFFFFD54F),
                         activeTrackColor = Color(0xFF7B61FF)

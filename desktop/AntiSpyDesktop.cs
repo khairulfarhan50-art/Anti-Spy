@@ -18,7 +18,7 @@ namespace AntiSpyDesktop
         private const int WS_EX_TRANSPARENT = 0x20;
         private const int WS_EX_LAYERED = 0x80000;
 
-        private float overlayOpacity = 0.5f;
+        private float overlayOpacity = 0.2f;
         private string patternType = "lines";
         private Bitmap noiseTexture = null;
         private TextureBrush noiseBrush = null;
@@ -114,9 +114,9 @@ namespace AntiSpyDesktop
 
                 case "lines":
                     // Draw vertical stripes
-                    using (Pen pen = new Pen(Color.Black, 2.5f))
+                    using (Pen pen = new Pen(Color.Black, 1.0f))
                     {
-                        float pitch = 7f;
+                        float pitch = 10f;
                         for (float x = 0; x < this.Width; x += pitch)
                         {
                             g.DrawLine(pen, x, 0, x, this.Height);
@@ -126,9 +126,9 @@ namespace AntiSpyDesktop
 
                 case "crosshatch":
                     // Draw diagonal mesh
-                    using (Pen pen = new Pen(Color.Black, 2f))
+                    using (Pen pen = new Pen(Color.Black, 1.0f))
                     {
-                        float pitch = 14f;
+                        float pitch = 18f;
                         float limit = Math.Max(this.Width, this.Height);
                         for (float offset = -limit; offset < limit; offset += pitch)
                         {
@@ -166,7 +166,7 @@ namespace AntiSpyDesktop
         private NotifyIcon trayIcon;
         private OverlayForm overlayForm;
         private bool isEnabled = true;
-        private float currentOpacity = 0.5f;
+        private float currentOpacity = 0.2f;
         private string currentPattern = "lines";
 
         private MenuItem menuEnable;
