@@ -1,0 +1,22 @@
+# Gradle files
+.gradle/
+build/
+app/build/
+local.properties
+
+# IDE files
+.idea/
+*.iml
+*.iws
+.project
+.classpath
+.settings/
+
+# OS files
+Thumbs.db
+db.properties
+.DS_Store
+
+# Desktop build artifacts (excluding compiler outputs, but keeping source)
+desktop/AntiSpyDesktop.exe
+*.exe
